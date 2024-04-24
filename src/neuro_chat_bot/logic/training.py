@@ -1,4 +1,6 @@
-# importing the required modules.
+# Обучение нейронной сети
+
+# импорт необходимых модулей
 import random
 import json
 import pickle
@@ -12,39 +14,36 @@ from keras.optimizers import SGD
 
 lemmatizer = WordNetLemmatizer()
 
-# reading the json.intense file
+# чтение файла intense.json
 intents = json.loads(open("intense.json").read())
 
-# creating empty lists to store data
+# создание пустых списков для хранения данных
 words = []
 classes = []
 documents = []
 ignore_letters = ["?", "!", ".", ","]
 for intent in intents['intents']:
     for pattern in intent['patterns']:
-        # separating words from patterns
+        # отделение слов от шаблонов
         word_list = nltk.word_tokenize(pattern)
-        words.extend(word_list)  # and adding them to words list
+        words.extend(word_list)  # и добавляем их в список слов
 
-        # associating patterns with respective tags
+        # связывание шаблонов с соответствующими тегами
         documents.append(((word_list), intent['tag']))
 
-        # appending the tags to the class list
+        # добавление тегов в список классов
         if intent['tag'] not in classes:
             classes.append(intent['tag'])
 
-        # storing the root words or lemma
-words = [lemmatizer.lemmatize(word)
-         for word in words if word not in ignore_letters]
+        # запоминание корневых слов или леммы
+words = [lemmatizer.lemmatize(word) for word in words if word not in ignore_letters]
 words = sorted(set(words))
 
-# saving the words and classes list to binary files
+# сохранение списка слов и классов в двоичные файлы
 pickle.dump(words, open('words.pkl', 'wb'))
 pickle.dump(classes, open('classes.pkl', 'wb'))
 
-# we need numerical values of the
-# words because a neural network
-# needs numerical values to work with
+# нам нужны числовые значения слов, тк нейронная сеть нуждается в числовых значениях для работы
 training = []
 output_empty = [0] * len(classes)
 for document in documents:
@@ -55,18 +54,18 @@ for document in documents:
     for word in words:
         bag.append(1) if word in word_patterns else bag.append(0)
 
-    # making a copy of the output_empty
+    # создание копии output_empty
     output_row = list(output_empty)
     output_row[classes.index(document[1])] = 1
     training.append([bag, output_row])
 random.shuffle(training)
 training = np.array(training, dtype="object")
 
-# splitting the data
+# разделение данных
 train_x = list(training[:, 0])
 train_y = list(training[:, 1])
 
-# creating a Sequential machine learning model
+# создание модели последовательного машинного обучения
 model = Sequential()
 model.add(Dense(128, input_shape=(len(train_x[0]),),
                 activation='relu'))
@@ -76,16 +75,15 @@ model.add(Dropout(0.5))
 model.add(Dense(len(train_y[0]),
                 activation='softmax'))
 
-# compiling the model
+# компиляция модели
 sgd = SGD(learning_rate=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 model.compile(loss='categorical_crossentropy',
               optimizer=sgd, metrics=['accuracy'])
 hist = model.fit(np.array(train_x), np.array(train_y),
                  epochs=200, batch_size=5, verbose=1)
 
-# saving the model
+# сохранение модели
 model.save("chatbotmodel.h5", hist)
 
-# print statement to show the
-# successful training of the Chatbot model
+# вывод строки, чтобы показать результат успешного обучения модели чат-бота
 print("Yay!")
