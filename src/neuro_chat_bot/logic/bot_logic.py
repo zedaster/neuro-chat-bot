@@ -1,15 +1,37 @@
+# Запуск чат-бота и получение ответа
+import json
+import search_answer
+intents = json.loads(open("intense.json").read())
+
+
 class BotLogic:
     """
     Логика для чат-бота
     """
 
-    def handle_message(self, text: str) -> str:
+    def __init__(self, message: str) -> None:
+        """
+        Инициализирует объект BotLogic.
+
+        :param message: Текст сообщения
+        :type message: str
+        """
+        self.message = message
+
+    def handle_message(self) -> str:
         """
         Обрабатывает сообщение, которое пришло из чат-бота
 
-        :param text: Текст сообщения
         :return: Текст сообщения, которое будет выведено пользователю в ответ
         """
-        if text == "hi":
-            return "hi"
-        return "Не понял ваш запрос. Попробуйте сформулировать его иначе."
+        ints = search_answer.predict_class(self.message)
+        answer = search_answer.get_response(ints, intents)
+        return answer
+
+
+print("Chatbot is up!")
+
+while True:
+    message = input("")
+    result = BotLogic(message).handle_message()
+    print(result)
