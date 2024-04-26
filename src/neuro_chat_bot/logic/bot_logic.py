@@ -1,7 +1,8 @@
 # Запуск чат-бота и получение ответа
 import json
 import search_answer
-intents = json.loads(open("intense.json").read())
+
+INTENSE_FILE_PATH = "intense.json"
 
 
 class BotLogic:
@@ -17,6 +18,8 @@ class BotLogic:
         :type message: str
         """
         self.message = message
+        with open(INTENSE_FILE_PATH) as intense_file:
+            self.intents = json.loads(intense_file.read())
 
     def handle_message(self) -> str:
         """
@@ -25,7 +28,7 @@ class BotLogic:
         :return: Текст сообщения, которое будет выведено пользователю в ответ
         """
         ints = search_answer.predict_class(self.message)
-        answer = search_answer.get_response(ints, intents)
+        answer = search_answer.get_response(ints, self.intents)
         return answer
 
 

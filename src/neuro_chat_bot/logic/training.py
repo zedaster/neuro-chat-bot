@@ -1,6 +1,5 @@
 # Обучение нейронной сети
 
-# импорт необходимых модулей
 import random
 import json
 import pickle
@@ -9,8 +8,13 @@ import nltk
 
 from keras.models import Sequential
 from nltk.stem import WordNetLemmatizer
-from keras.layers import Dense, Activation, Dropout
+from keras.layers import Dense, Dropout
 from keras.optimizers import SGD
+
+MODEL_PATH = 'chatbotmodel.keras'
+
+nltk.download('punkt')
+nltk.download('wordnet')
 
 lemmatizer = WordNetLemmatizer()
 
@@ -83,7 +87,7 @@ hist = model.fit(np.array(train_x), np.array(train_y),
                  epochs=200, batch_size=5, verbose=1)
 
 # сохранение модели
-model.save("chatbotmodel.h5", hist)
+model.save(MODEL_PATH, hist)
 
 # вывод строки, чтобы показать результат успешного обучения модели чат-бота
 print("Yay!")
