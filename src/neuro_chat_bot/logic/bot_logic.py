@@ -1,15 +1,41 @@
+import json
+import search_answer
+
+INTENSE_FILE_PATH = "intense.json"
+
+
 class BotLogic:
     """
     Логика для чат-бота
     """
 
-    def handle_message(self, text: str) -> str:
+    def __init__(self) -> None:
         """
-        Обрабатывает сообщение, которое пришло из чат-бота
+        Инициализирует логику для чат-бота.
+        """
+        with open(INTENSE_FILE_PATH) as intense_file:
+            self.intents = json.loads(intense_file.read())
 
-        :param text: Текст сообщения
+    def handle_message(self, message) -> str:
+        """
+        Отвечает на сообщение, которое пришло из чат-бота
+
+        :param message: Текст сообщения
+        :type message: str
+
         :return: Текст сообщения, которое будет выведено пользователю в ответ
         """
-        if text == "hi":
-            return "hi"
-        return "Не понял ваш запрос. Попробуйте сформулировать его иначе."
+        ints = search_answer.predict_class(message)
+        answer = search_answer.get_response(ints, self.intents)
+        return answer
+
+
+# Для тестирования логики бота. Перед этим необходимо запустить создание модели (training.py)
+if __name__ == "__main__":
+    logic = BotLogic()
+    print("Chatbot is up!")
+
+    while True:
+        message = input("")
+        result = logic.handle_message(message)
+        print(result)

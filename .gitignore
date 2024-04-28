@@ -1,3 +1,12 @@
+# Cache of virtual env
 venv
+
+# IDE files
 .idea
+
+# Configs
 *.config.yaml
+
+# Model
+*.keras
+*.pkl
