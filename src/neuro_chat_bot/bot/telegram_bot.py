@@ -2,6 +2,8 @@ from ..bot.bot import Bot
 from ..logic.bot_logic import BotLogic
 from telegram.ext import Updater, MessageHandler, Filters
 
+TOKEN_FILE_PATH = 'telegram_token.txt'
+
 
 def load_token(filename):
     """
@@ -23,7 +25,7 @@ class TelegramBot(Bot):
         :param logic: Логика для чат-бота
         """
         super().__init__(logic)
-        self.token = load_token('telegram_token.txt')
+        self.token = load_token(TOKEN_FILE_PATH)
 
     def start(self):
         """
