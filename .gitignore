@@ -5,7 +5,7 @@ venv
 .idea
 
 # Configs
-*.config.yaml
+config/telegram_token.txt
 
 # Model
 *.keras
