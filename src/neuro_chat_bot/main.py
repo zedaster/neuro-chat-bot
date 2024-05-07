@@ -8,7 +8,8 @@ from logic.bot_logic import BotLogic
 
 def main():
     bot_logic = BotLogic()
-    TelegramBot(bot_logic)
+    telegram_bot = TelegramBot(bot_logic)
+    telegram_bot.start()
 
 
 if __name__ == "__main__":
