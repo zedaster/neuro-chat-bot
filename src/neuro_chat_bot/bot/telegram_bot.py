@@ -1,8 +1,8 @@
-from ..bot.bot import Bot
-from ..logic.bot_logic import BotLogic
-from telegram.ext import Updater, MessageHandler, Filters
+import telebot
+from src.neuro_chat_bot.logic.bot_logic import BotLogic
+from src.neuro_chat_bot.bot.bot import Bot
 
-TOKEN_FILE_PATH = 'telegram_token.txt'
+TOKEN_FILE_PATH = 'telegram_token.example.txt'
 
 
 def load_token(filename):
@@ -26,24 +26,16 @@ class TelegramBot(Bot):
         """
         super().__init__(logic)
         self.token = load_token(TOKEN_FILE_PATH)
+        self.bot = telebot.TeleBot(self.token)
+
+        @self.bot.message_handler(func=lambda message: True)
+        def handle_message(message):
+            question = message.text
+            answer = self.logic.handle_message(question)
+            self.bot.reply_to(message, answer)
 
     def start(self):
         """
         Запускает бота для Телеграм
         """
-        updater = Updater(token=self.token, use_context=True)
-        dp = updater.dispatcher
-        dp.add_handler(MessageHandler(Filters.text, self.respond))
-        updater.start_polling()
-        updater.idle()
-
-    def respond(self, update, context):
-        """
-        Отвечает на сообщение пользователя
-
-        :param update: Обновление из Телеграма
-        :param context: Контекст выполнения
-        """
-        question = update.message.text
-        answer = self.logic.handle_message(question)
-        update.message.reply_text(answer)
+        self.bot.polling()
