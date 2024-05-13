@@ -2,8 +2,8 @@
 Главный модуль
 """
 
-from bot.telegram_bot import TelegramBot
-from logic.bot_logic import BotLogic
+from src.neuro_chat_bot.bot.telegram_bot import TelegramBot
+from src.neuro_chat_bot.logic.bot_logic import BotLogic
 
 
 def main():

@@ -2,7 +2,7 @@ import telebot
 from src.neuro_chat_bot.logic.bot_logic import BotLogic
 from src.neuro_chat_bot.bot.bot import Bot
 
-TOKEN_FILE_PATH = 'telegram_token.example.txt'
+TOKEN_FILE_PATH = '../../config/telegram_token.txt'
 
 
 def load_token(filename):
@@ -38,4 +38,5 @@ class TelegramBot(Bot):
         """
         Запускает бота для Телеграм
         """
+        print('[Telegram] Bot is pooling now...')
         self.bot.polling()
