@@ -1,5 +1,5 @@
 import json
-import search_answer
+import src.neuro_chat_bot.logic.search_answer as search_answer
 
 INTENSE_FILE_PATH = "intense.json"
 
@@ -28,14 +28,3 @@ class BotLogic:
         ints = search_answer.predict_class(message)
         answer = search_answer.get_response(ints, self.intents)
         return answer
-
-
-# Для тестирования логики бота. Перед этим необходимо запустить создание модели (training.py)
-if __name__ == "__main__":
-    logic = BotLogic()
-    print("Chatbot is up!")
-
-    while True:
-        message = input("")
-        result = logic.handle_message(message)
-        print(result)
