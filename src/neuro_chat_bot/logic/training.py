@@ -19,7 +19,7 @@ nltk.download('wordnet')
 lemmatizer = WordNetLemmatizer()
 
 # чтение файла intense.json
-intents = json.loads(open("intense.json").read())
+intents = json.loads(open("big_intense.json", encoding='utf-8').read())
 
 # создание пустых списков для хранения данных
 words = []
