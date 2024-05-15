@@ -1,11 +1,14 @@
 # Cache of virtual env
 venv
 
+# Python cache
+**/__pycache__/*
+
 # IDE files
 .idea
 
 # Configs
-*.config.yaml
+config/telegram_token.txt
 
 # Model
 *.keras
